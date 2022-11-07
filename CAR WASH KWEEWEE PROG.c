@@ -86,6 +86,31 @@ void cars_ahead(struct node * ptr)
     printf("Number of cars ahead of %d is %d",ptr->lic,count);
 }
 
+void start_id(struct node* Front,struct node* ptr, int ID)
+{
+    struct node* temp=(struct node*)malloc(sizeof(struct node));
+    temp=Front;
+    int flag=0;
+    do
+    {
+        if(temp->lic==ID)
+        {
+            int start_time=0;
+            while(ptr->next!=NULL)
+            {
+                start_time= start_time + ptr->time;
+                ptr=ptr->next;
+            }
+            printf("The start time for %d is %d",ptr->lic,start_time);
+            flag=1;
+        }
+        else
+        {
+            temp=temp->next;
+        }
+    }while(flag!=1);
+}
+
 int main()
 {
     int ID, wax_check, mins;
@@ -102,4 +127,5 @@ int main()
     start_time(Front);
     end_time(Front);
     cars_ahead(Front);
+    start_id(Front,Front,6789);
 }
