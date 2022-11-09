@@ -31,12 +31,23 @@ struct node* enqueue(struct node*Front, int ID, int wax_check, int mins)
       ptr->next=newnode;
       newnode->next=NULL;
     }
-    printf("License Plate number %d added to queue!!\n\n",ID);
+    
+    if(newnode->wax==0)
+    {
+        printf("\nLicense Plate number %d added to queue for CAR WASH!!\n\n",ID);
+    }
+    else
+    {
+        printf("\nLicense Plate number %d added to queue for CAR WASH AND WAX!!\n\n",ID);
+    }
     return Front;
 }
 
-struct node* dequeue(struct node*ptr, struct node*Front)
+struct node* dequeue(struct node*Front)
 {
+    struct node* ptr=(struct node*)malloc(sizeof(struct node));
+    ptr=Front;
+    printf("The Car with license number %d is removed from queue.",ptr->lic);
     Front= ptr->next;
     free(ptr);
     return Front;
@@ -44,15 +55,36 @@ struct node* dequeue(struct node*ptr, struct node*Front)
 
 void display(struct node*ptr)
 {
-
-    while(ptr->next!=NULL)
+    printf("\n\n-----------------------------------------------------------------\n\n");
+    if(ptr!=NULL)
     {
-        printf("%d\n",ptr->lic);
-        ptr=ptr->next;
+        while(ptr->next!=NULL)
+        {
+            if(ptr->wax==0)
+            {
+                printf("%d - WASH ONLY - 10 minutes\n",ptr->lic);
+            }
+            else
+            {
+                printf("%d - WASH AND WAX - 14 minutes\n",ptr->lic);
+            }
+            ptr=ptr->next;
+        }
+        if(ptr->wax==0)
+        {
+            printf("%d - WASH ONLY - 10 minutes\n",ptr->lic);
+        }
+        else
+        {
+            printf("%d - WASH AND WAX - 14 minutes\n",ptr->lic);
+        }
     }
-    printf("%d\n",ptr->lic);
+    else
+    {
+        printf("There are no customers in queue.");
+    }
+    printf("\n-----------------------------------------------------------------\n\n");
 }
-
 
 void start_time(struct node* ptr)
 {
@@ -77,15 +109,32 @@ void end_time(struct node * ptr)
     printf("The end time for %d is %d\n",ptr->lic,end_time);
 }
 
-void cars_ahead(struct node * ptr)
+void cars_ahead(struct node * Front,int ID)
 {
+    struct node* temp=(struct node*)malloc(sizeof(struct node));
+    temp=Front;
+    struct node* ptr=(struct node*)malloc(sizeof(struct node));
+    ptr=Front;
     int count=0;
-    while(ptr->next!=NULL)
+    int flag=0;
+    do
     {
-        count = count + 1;
-        ptr = ptr->next;
-    }
-    printf("Number of cars ahead of %d is %d\n",ptr->lic,count);
+        if(temp->lic==ID)
+        {
+            
+            while(ptr->lic!=temp->lic)
+            {
+                count = count + 1;
+                ptr = ptr->next;
+            }
+            printf("There are %d cars ahead of License Plate Number %d\n",count,temp->lic);
+            flag=1;
+        }
+        else
+        {
+            temp=temp->next;
+        }
+    }while(flag!=1);
 }
 
 void start_id(struct node* Front,int ID)
@@ -114,7 +163,7 @@ void start_id(struct node* Front,int ID)
                     ptr=ptr->next;
                 }
             }
-            printf("The start time for %d is %d\n",ptr->lic,start_time);
+            printf("\n\nThe start time for %d is %d\n",ptr->lic,start_time);
             flag=1;
         }
         else
@@ -150,7 +199,7 @@ void end_id(struct node* Front,int ID)
                 }
             }
             end_time= end_time + ptr->time;
-            printf("The start time for %d is %d\n",ptr->lic,end_time);
+            printf("\n\nThe end time for %d is %d\n",ptr->lic,end_time);
             flag=1;
         }
         else
@@ -175,13 +224,14 @@ int main()
         
         printf("\nEnter your choice: ");
         scanf("%d",&choice);
+        printf("\n\n----------------------------------------------------------------\n");
         switch(choice)
         {
             case 1:
                 printf("Enter license plate number of your car(only last four digits): ");
                 scanf("%d",&ID);
                 
-                printf("\n1) Wash Only-----> 10 minutes\n2) Wash and Wax -----> 14 minutes\n");
+                printf("\n\n1) Wash Only-----> 10 minutes\n2) Wash and Wax -----> 14 minutes\n\n");
                 int flag2=0;
                 while(flag2==0)
                 {
@@ -194,7 +244,7 @@ int main()
                     }
                     else if(choice2==2)
                     {
-                        Front = enqueue(Front,ID,0,14);
+                        Front = enqueue(Front,ID,1,14);
                         flag2=1;
                     }
                     else
@@ -205,17 +255,35 @@ int main()
                 break;
             
             case 2:
+                Front = dequeue(Front);
                 break;
                 
             case 3:
+                printf("\n\nEnter license plate number (last 4 digits): ");
+                scanf("%d",&ID);
+                start_id(Front,ID);
                 break;
-                
+
             case 4:
+                printf("\n\nEnter license plate number (last 4 digits): ");
+                scanf("%d",&ID);
+                end_id(Front,ID);
                 break;
                 
             case 5:
+                
                 break;
             
+            case 6:
+                display(Front);
+                break;
+            
+            case 7:
+                printf("Enter License Plate number: ");
+                scanf("%d",&ID);
+                cars_ahead(Front,ID);
+                break;
+                
             default:
                 printf("This option doesn't exist!!!");
                 break;
