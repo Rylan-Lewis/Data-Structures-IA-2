@@ -6,7 +6,7 @@ struct node
     int lic; //Last 4 digits of license plate
     int wax;
     int time;
-    struct node*next;
+    struct node* next;
 };
 
 struct node* insert(struct node*Front, int ID, int wax_check, int mins)
@@ -101,12 +101,12 @@ void start_id(struct node* Front,int ID)
             
             while(ptr->lic!=temp->lic)
             {
-                if(ptr->wax==1)
+                if(temp->wax==1)
                 {
                     start_time= start_time + ptr->time;
                     ptr=ptr->next;
                 }
-                else if(ptr->wax==0)
+                else if(temp->wax==0)
                 {
                     start_time=start_time+10;
                     ptr=ptr->next;
@@ -122,10 +122,12 @@ void start_id(struct node* Front,int ID)
     }while(flag!=1);
 }
 
-void end_id(struct node* Front,struct node* ptr, int ID)
+void end_id(struct node* Front,int ID)
 {
     struct node* temp=(struct node*)malloc(sizeof(struct node));
     temp=Front;
+    struct node* ptr=(struct node*)malloc(sizeof(struct node));
+    ptr=Front;
     int flag=0;
     int end_time=0;
     do
@@ -134,11 +136,19 @@ void end_id(struct node* Front,struct node* ptr, int ID)
         {
             while(ptr->lic!=temp->lic)
             {
-                end_time= end_time + ptr->time;
-                ptr=ptr->next;
+                if(temp->wax==1)
+                {
+                    end_time= end_time + ptr->time;
+                    ptr=ptr->next;
+                }
+                else if(temp->wax==0)
+                {
+                    end_time=end_time+10;
+                    ptr=ptr->next;
+                }
             }
             end_time= end_time + ptr->time;
-            printf("The end time for %d is %d\n",ptr->lic,end_time);
+            printf("The start time for %d is %d\n",ptr->lic,end_time);
             flag=1;
         }
         else
@@ -165,5 +175,5 @@ int main()
     end_time(Front);
     cars_ahead(Front);
     start_id(Front,6789);
-    end_id(Front,Front,6789);
+    end_id(Front,6789);
 }
