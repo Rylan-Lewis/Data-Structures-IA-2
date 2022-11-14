@@ -110,57 +110,31 @@ void display(struct node*ptr)
 }
 
 //Determine start time for new customer
-void start_time(struct node* ptr,int choice2)
+void start_time(struct node* ptr)
 {
     int start_time=0;
 
-    if(choice2==1)
+    while(ptr->next!=NULL)
     {
+        start_time= start_time + 10;
+        ptr=ptr->next;
+    }
+    printf("The start time for %d is %d\n",ptr->lic,start_time);
 
-        while(ptr->next!=NULL)
-        {
-            start_time= start_time + 10;
-            ptr=ptr->next;
-        }
-        printf("The start time for %d is %d\n",ptr->lic,start_time);
-    }
-    else
-    {
-        while(ptr->next!=NULL)
-        {
-            start_time= start_time + ptr->time;
-            ptr=ptr->next;
-        }
-        printf("The start time for %d is %d\n",ptr->lic,start_time);
-    }
 }
 
 //Determine end time for new customer
-void end_time(struct node * ptr,int choice2)
+void end_time(struct node * ptr)
 {
     int end_time=0;
     
-    if(choice2==1)
+    while(ptr->next!=NULL)
     {
-
-        while(ptr->next!=NULL)
-        {
-            end_time= end_time + 10;
-            ptr=ptr->next;
-        }
         end_time= end_time + 10;
-        printf("The end time for %d is %d\n",ptr->lic,end_time);
+        ptr=ptr->next;
     }
-    else
-    {
-        while(ptr->next!=NULL)
-        {
-            end_time= end_time + ptr->time;
-            ptr=ptr->next;
-        }
-        end_time= end_time + ptr->time;
-        printf("The end time for %d is %d\n",ptr->lic,end_time);
-    }
+    end_time= end_time + ptr -> time;
+    printf("The end time for %d is %d\n",ptr->lic,end_time);
 
     printf("\n\n-----------------------------------------------------------------\n\n");
 }
@@ -211,19 +185,10 @@ void start_id(struct node* Front,int ID)
     {
         if(temp->lic==ID)
         {
-            
             while(ptr->lic!=temp->lic)
             {
-                if(temp->wax==1)
-                {
-                    start_time= start_time + ptr->time;
-                    ptr=ptr->next;
-                }
-                else
-                {
-                    start_time=start_time+10;
-                    ptr=ptr->next;
-                }
+                start_time = start_time + 10;
+                ptr=ptr->next;
             }
             printf("\n\nThe start time for %d is %d\n",ptr->lic,start_time);
             flag=1;
@@ -233,6 +198,11 @@ void start_id(struct node* Front,int ID)
             temp=temp->next;
         }
     }while(flag!=1);
+
+    if(temp==NULL)
+    {
+        printf("This ID number doesnt exist in the queue");
+    }
     printf("\n\n-----------------------------------------------------------------\n\n");
 
 }
@@ -253,18 +223,11 @@ void end_id(struct node* Front,int ID)
         {
             while(ptr->lic!=temp->lic)
             {
-                if(temp->wax==1)
-                {
-                    end_time= end_time + ptr->time;
-                    ptr=ptr->next;
-                }
-                else if(temp->wax==0)
-                {
-                    end_time=end_time+10;
-                    ptr=ptr->next;
-                }
+                end_time=end_time+10;
+                ptr=ptr->next;
             }
             end_time= end_time + ptr->time;
+            
             printf("\n\nThe end time for %d is %d\n",ptr->lic,end_time);
             flag=1;
         }
@@ -307,15 +270,15 @@ int main()
                     if(choice2==1)
                     {
                         Front = enqueue(Front,ID,0,10,300);
-                        start_time(Front,1);
-                        end_time(Front,1);
+                        start_time(Front);
+                        end_time(Front);
                         flag2=1;
                     }
                     else if(choice2==2)
                     {
                         Front = enqueue(Front,ID,1,14,500);
-                        start_time(Front,2);
-                        end_time(Front,2);
+                        start_time(Front);
+                        end_time(Front);
                         flag2=1;
                     }
                     else
