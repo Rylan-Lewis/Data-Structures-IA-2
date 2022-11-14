@@ -12,13 +12,16 @@ struct node
 
 
 //Add Customer to queue
-struct node* enqueue(struct node*Front, int ID, int wax_check, int mins)
+struct node* enqueue(struct node*Front, int ID, int wax_check, int mins, int cost)
 {
     struct node*newnode=(struct node*)malloc(sizeof(struct node));
     newnode->lic= ID;
     newnode->wax=wax_check;
     newnode->time=mins;
+    newnode -> rate = cost;
+
     struct node*ptr=Front;
+
     if(Front==NULL)
     {
         Front=newnode;
@@ -44,8 +47,6 @@ struct node* enqueue(struct node*Front, int ID, int wax_check, int mins)
     {
         printf("\nLicense Plate number %d added to queue for CAR WASH AND WAX!!\n\n",ID);
     }
-
-    printf("\n\n-----------------------------------------------------------------\n\n");
     return Front;
 }
 
@@ -83,11 +84,11 @@ void display(struct node*ptr)
         {
             if(ptr->wax==0)
             {
-                printf("%d - WASH ONLY - 10 minutes - 500 Rs\n",ptr->lic);
+                printf("%d - WASH ONLY - 10 minutes\n",ptr->lic);
             }
             else
             {
-                printf("%d - WASH AND WAX - 14 minutes - 750 Rs\n",ptr->lic);
+                printf("%d - WASH AND WAX - 14 minutes\n",ptr->lic);
             }
             ptr=ptr->next;
         }
@@ -109,34 +110,57 @@ void display(struct node*ptr)
 }
 
 //Determine start time for new customer
-void start_time(struct node* ptr)
+void start_time(struct node* ptr,int choice2)
 {
     int start_time=0;
-    printf("\n\n-----------------------------------------------------------------\n\n");
 
-    while(ptr->next!=NULL)
+    if(choice2==1)
     {
-        start_time= start_time + ptr->time;
-        ptr=ptr->next;
-    }
-    printf("The start time for %d is %d\n",ptr->lic,start_time);
 
-    printf("\n\n-----------------------------------------------------------------\n\n");
+        while(ptr->next!=NULL)
+        {
+            start_time= start_time + 10;
+            ptr=ptr->next;
+        }
+        printf("The start time for %d is %d\n",ptr->lic,start_time);
+    }
+    else
+    {
+        while(ptr->next!=NULL)
+        {
+            start_time= start_time + ptr->time;
+            ptr=ptr->next;
+        }
+        printf("The start time for %d is %d\n",ptr->lic,start_time);
+    }
 }
 
 //Determine end time for new customer
-void end_time(struct node * ptr)
+void end_time(struct node * ptr,int choice2)
 {
     int end_time=0;
-    printf("\n\n-----------------------------------------------------------------\n\n");
     
-    while(ptr->next!=NULL)
+    if(choice2==1)
     {
-        end_time= end_time + ptr->time;
-        ptr=ptr->next;
+
+        while(ptr->next!=NULL)
+        {
+            end_time= end_time + 10;
+            ptr=ptr->next;
+        }
+        end_time= end_time + 10;
+        printf("The end time for %d is %d\n",ptr->lic,end_time);
     }
-    end_time= end_time + ptr->time;
-    printf("The end time for %d is %d\n",ptr->lic,end_time);
+    else
+    {
+        while(ptr->next!=NULL)
+        {
+            end_time= end_time + ptr->time;
+            ptr=ptr->next;
+        }
+        end_time= end_time + ptr->time;
+        printf("The end time for %d is %d\n",ptr->lic,end_time);
+    }
 
     printf("\n\n-----------------------------------------------------------------\n\n");
 }
@@ -181,6 +205,7 @@ void start_id(struct node* Front,int ID)
     ptr=Front;
     int flag=0;
     int start_time=0;
+
     printf("\n\n-----------------------------------------------------------------\n\n");
     do
     {
@@ -194,7 +219,7 @@ void start_id(struct node* Front,int ID)
                     start_time= start_time + ptr->time;
                     ptr=ptr->next;
                 }
-                else if(temp->wax==0)
+                else
                 {
                     start_time=start_time+10;
                     ptr=ptr->next;
@@ -209,6 +234,7 @@ void start_id(struct node* Front,int ID)
         }
     }while(flag!=1);
     printf("\n\n-----------------------------------------------------------------\n\n");
+
 }
 
 //Displays end time for a customer
@@ -252,7 +278,7 @@ void end_id(struct node* Front,int ID)
 
 int main()
 {
-    int ID, wax_check, mins;
+    int ID, wax_check, mins,cost;
     int choice,choice2;
     struct node*Front=(struct node* )malloc(sizeof(struct node));
     Front=NULL;
@@ -272,7 +298,7 @@ int main()
                 printf("Enter license plate number of your car(only last four digits): ");
                 scanf("%d",&ID);
                 
-                printf("\n\n1) Wash Only-----> 10 minutes\n2) Wash and Wax -----> 14 minutes\n\n");
+                printf("\n\n1) Wash Only -----> 10 minutes ---------> 300 Rupees\n2) Wash and Wax -----> 14 minutes ---------> 500 Rupees\n\n");
                 int flag2=0;
                 while(flag2==0)
                 {
@@ -280,12 +306,16 @@ int main()
                     scanf("%d",&choice2);
                     if(choice2==1)
                     {
-                        Front = enqueue(Front,ID,0,10);
+                        Front = enqueue(Front,ID,0,10,300);
+                        start_time(Front,1);
+                        end_time(Front,1);
                         flag2=1;
                     }
                     else if(choice2==2)
                     {
-                        Front = enqueue(Front,ID,1,14);
+                        Front = enqueue(Front,ID,1,14,500);
+                        start_time(Front,2);
+                        end_time(Front,2);
                         flag2=1;
                     }
                     else
