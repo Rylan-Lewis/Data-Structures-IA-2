@@ -103,41 +103,12 @@ void display(struct node*ptr)
     }
     else
     {
-        printf("There are no customers in queue.");
+        printf("There are no customers in queue.\n");
     }
 
     printf("\n-----------------------------------------------------------------\n\n");
 }
 
-//Determine start time for new customer
-void start_time(struct node* ptr)
-{
-    int start_time=0;
-
-    while(ptr->next!=NULL)
-    {
-        start_time= start_time + 10;
-        ptr=ptr->next;
-    }
-    printf("The start time for %d is %d\n",ptr->lic,start_time);
-
-}
-
-//Determine end time for new customer
-void end_time(struct node * ptr)
-{
-    int end_time=0;
-    
-    while(ptr->next!=NULL)
-    {
-        end_time= end_time + 10;
-        ptr=ptr->next;
-    }
-    end_time= end_time + ptr -> time;
-    printf("The end time for %d is %d\n",ptr->lic,end_time);
-
-    printf("\n\n-----------------------------------------------------------------\n\n");
-}
 
 //Displays number of cars ahead
 void cars_ahead(struct node * Front,int ID)
@@ -227,7 +198,7 @@ void end_id(struct node* Front,int ID)
                 ptr=ptr->next;
             }
             end_time= end_time + ptr->time;
-            
+
             printf("\n\nThe end time for %d is %d\n",ptr->lic,end_time);
             flag=1;
         }
@@ -236,8 +207,33 @@ void end_id(struct node* Front,int ID)
             temp=temp->next;
         }
     }while(flag!=1);
+    if(temp==NULL)
+    {
+        printf("This ID number doesnt exist in the queue");
+    }
     printf("\n\n-----------------------------------------------------------------\n\n");
 }
+
+void print(struct node*Front)
+{
+    struct node*ptr=Front;
+    int start_time=0, end_time=0;
+    while(ptr->next!=NULL)
+    {
+       ptr = ptr->next;
+       start_time= start_time+10;
+       end_time= end_time+10;
+    }
+    end_time=end_time+ptr->time;
+
+    printf("\n\n-----------------------------------------------------------------\n\n");
+    printf("| The License Number is: %d\n", ptr->lic);
+    printf("| Your Washing Will Start in: %d\n", start_time);
+    printf("| Your Washing Will End in: %d\n", end_time);
+    printf("| Your bill: %d\n", ptr->rate);
+    printf("\n-----------------------------------------------------------------\n\n");
+}
+
 
 int main()
 {
@@ -250,14 +246,15 @@ int main()
     
     do
     {
-        printf("\n1) ADD A CUSTOMER TO QUEUE\n2) REMOVE A CUSTOMER FROM QUEUE\n3) CHECK START TIME FOR A CUSTOMER\n4) CHECK END TIME FOR A CUSTOMER\n5) PRINT TICKET FOR CUSTOMER\n6) DISPLAY THE QUEUE\n7) CHECK NUMBER OF CARS AHEAD\n");
+        printf("\n1) ADD A CUSTOMER TO QUEUE\n2) REMOVE A CUSTOMER FROM QUEUE\n3) CHECK START TIME FOR A CUSTOMER\n4) CHECK END TIME FOR A CUSTOMER\n5) PRINT TICKET FOR LAST CUSTOMER\n6) DISPLAY THE QUEUE\n7) CHECK NUMBER OF CARS AHEAD\n");
         
         printf("\nEnter your choice: ");
         scanf("%d",&choice);
-        printf("\n\n----------------------------------------------------------------\n");
+    
         switch(choice)
         {
             case 1:
+                printf("\n\n-----------------------------------------------------------------\n\n");
                 printf("Enter license plate number of your car(only last four digits): ");
                 scanf("%d",&ID);
                 
@@ -270,15 +267,11 @@ int main()
                     if(choice2==1)
                     {
                         Front = enqueue(Front,ID,0,10,300);
-                        start_time(Front);
-                        end_time(Front);
                         flag2=1;
                     }
                     else if(choice2==2)
                     {
                         Front = enqueue(Front,ID,1,14,500);
-                        start_time(Front);
-                        end_time(Front);
                         flag2=1;
                     }
                     else
@@ -305,7 +298,7 @@ int main()
                 break;
                 
             case 5:
-                
+                print(Front);
                 break;
             
             case 6:
