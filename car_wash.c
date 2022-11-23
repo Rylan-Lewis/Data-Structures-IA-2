@@ -190,7 +190,7 @@ void end_id(struct node* Front,int ID)
             }
             end_time= end_time + ptr->time;
 
-            printf("\n\nThe end time for %d is %d\n",ptr->lic,end_time);
+            printf("\n\nThe end time for %d is %d minutes\n",ptr->lic,end_time);
             flag=1;
         }
         else
@@ -206,7 +206,7 @@ void end_id(struct node* Front,int ID)
     printf("\n\n-----------------------------------------------------------------\n\n");
 }
 
-void print(struct node*Front)
+void print(struct node*Front,int ID)
 {
     struct node*ptr=Front;
     int start_time=0, end_time=0;
@@ -220,9 +220,9 @@ void print(struct node*Front)
 
     printf("\n\n-----------------------------------------------------------------\n\n");
     printf("| The License Number is: %d\n", ptr->lic);
-    printf("| Your Washing Will Start in: %d\n", start_time);
-    printf("| Your Washing Will End in: %d\n", end_time);
-    printf("| Your bill: %d\n", ptr->rate);
+    printf("| Your Washing Will Start in: %d minutes\n", start_time); 
+    printf("| Your Washing Will End in: %d minutes\n", end_time);
+    printf("| Your bill: %d Rupees\n", ptr->rate);
     printf("\n-----------------------------------------------------------------\n\n");
 }
 
@@ -291,7 +291,9 @@ int main()
                 break;
                 
             case 5:
-                print(Front);
+                printf("\n\nEnter license plate number: ");
+                scanf("%d",&ID);
+                print(Front,ID);
                 break;
             
             case 6:
