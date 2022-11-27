@@ -210,7 +210,7 @@ void print(struct node*Front,int ID)
 {
     struct node*ptr=Front;
     int start_time=0, end_time=0;
-    while(ptr->next!=NULL)
+    while(ptr->lic!=ID)
     {
        ptr = ptr->next;
        start_time= start_time+ptr ->time;
